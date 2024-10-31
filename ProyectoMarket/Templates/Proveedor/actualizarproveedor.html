@@ -1,0 +1,48 @@
+{% load static %}
+{% include 'Inc/header.html' %}
+<h1>Actualizar Proveedor</h1>
+
+<div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for p in proveedor %}
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="">Nombre:</label>
+                    <input type="text" name="nombre" id="nombre" class="form-control" value="{{ p.1 }}" required>
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="">Direccion:</label>
+                    <input type="text" name="direccion" id="direccion" class="form-control" value="{{ p.2 }}" required>
+                </div> 
+            
+                <div class="col-md-4">
+                    <label for="">Nit:</label>
+                    <input type="text" name="nit" id="nit" class="form-control" value="{{ p.3 }}" required>
+                </div> 
+            </div> 
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="">Email:</label>
+                    <input type="email" name="email" id="email" class="form-control" value="{{ p.4 }}" required>
+                </div>   
+                
+                <div class="col-md-6">
+                    <label for="">Observaciones:</label>
+                    <input type="text" name="observaciones" id="observaciones" class="form-control" value="{{ p.5 }}" required>
+                </div> 
+            </div><br>
+            <div class="text-center mt-2">
+                <button type="submit" class="btn btn-success">Actualizar Proveedor</button>
+            </div>   
+        {% endfor %}    
+        
+    </form>       
+    
+</div>
+
+
+
+ 
+{% include 'Inc/footer.html' %}

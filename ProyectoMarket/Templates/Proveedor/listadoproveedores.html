@@ -1,0 +1,54 @@
+{% load static %}
+{% include 'Inc/header.html' %}
+
+<div class="container">
+    <div class="text-center mt-4" >
+        <h1>Listar Proveedor</h1>
+    </div>
+    
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nombres </th>
+                <th>Direccion</th>
+                <th>Nit</th>
+                <th>Email</th>
+                <th>Observaciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in proveedores %}
+                <tr>
+                    <td>{{ p.1 }}</td>
+                    <td>{{ p.2 }}</td>
+                    <td>{{ p.3 }}</td>
+                    <td>{{ p.4 }}</td>
+                    <td>{{ p.5 }}</td>
+                    <td>
+                       <a href="/Proveedor/actualizar/{{p.0}}"><button class="btn btn-success btn-sm">Actualizar</button></a> 
+                       <button onclick="borrar('{{p.0}}')" class="btn btn-danger btn-sm">Eliminar</button>
+                       
+                       <form action="/Proveedor/eliminar" method="post" id="formulario{{p.0}}">
+                            {% csrf_token %}
+                            <input type="hidden" name="idproveedor" id="idproveedor" value="{{p.0}}">
+                       </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br><br> 
+    <script>
+        function borrar(id){
+            confirmar= confirm("Esta seguro de eliminar el registro?")
+            if (confirmar){
+                //location.href= "/Proveedor/eliminar/" + id;
+                document.getElementById('formulario'+id).submit();
+            }
+        }
+    </script> 
+
+</div>
+
+{% include 'Inc/footer.html' %}

@@ -1,0 +1,74 @@
+{% load static %}
+{% include 'Inc/header.html' %}
+
+<h1>Actualizar Producto</h1>
+{% for p in producto %}
+<div class="text-center">
+    <img src="{% static 'Img/Productos/' %}{{ p.Foto }}" alt="" width="100" height="100"> <br>
+    Imagen anterior
+</div>
+
+<div class="container">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-md-4">
+                <label for="">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" value="{{ p.Nombre }}" required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Precio:</label>
+                <input type="number" name="precio" id="precio" class="form-control" value="{{ p.Precio|floatformat:0 }}"
+                    required>
+            </div>
+
+            <div class="col-md-4">
+                <label for="">Foto:</label> <br>
+                <input type="file" name="foto" id="foto" class="form-control">
+                <input type="hidden" name="foto_anterior" value="{{p.Foto}}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <label for="">Cantidad:</label>
+                <input type="number" name="cantidad" id="cantidad" class="form-control"
+                    value="{{ p.Cantidad|floatformat:0 }}" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="">Descripcion:</label>
+                <input type="text" name="descripcion" id="descripcion" class="form-control" value="{{ p.Descripcion }}"
+                    required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="">Fecha de Registro:</label>
+                <input type="date" name="fecha" id="fecha" class="form-control" value="{{ p.Fecha }}" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="">Proveedor del producto:</label>
+                <select name="proveedor_id" id="proveedor_id" class="form-select" required>
+                    <option value="" disabled>Selecione un proveedor</option>
+                    {% for pv in proveedores %}                        
+                        <option value="{{ pv.id }}" 
+                            {% if p.proveedor.id == pv.id %} 
+                                selected 
+                            {% endif %}> 
+                            {{ pv.Nombre }} - {{ pv.Nit }}
+                        </option>                        
+                    {% endfor %}
+                </select>
+            </div>
+        </div><br>
+{% endfor %}
+        <div class="text-center mt-2">
+            <button type="submit" class="btn btn-success">Actualizar Producto</button>
+        </div>
+    </form>
+</div>
+
+{% include 'Inc/footer.html' %}

@@ -1,0 +1,147 @@
+{% load static %}
+{% include 'Inc/header.html' %}
+
+<div class="container">
+  <div class="text-center mt-4" >
+    <h1>Listado Productos</h1>
+  </div>
+
+  <h1>Listado de Productos</h1>
+  
+  <section>
+      <div class="container">
+          <div class="row">
+              {% for p in productos %}
+              <div class="col-md-4">
+                  <div class="card card-01">
+                      <img class="card-img-top"
+                          src="{% static 'Img/Productos/' %}{{p.Foto}}"
+                          alt="Card image cap" width="250" height="250">
+                      <div class="card-body">
+                          <span class="badge-box"><i class="fa fa-check"></i></span>
+                          <h4 class="card-title">{{ p.Nombre }}</h4>
+                          <p class="card-text">
+                            Descripcion: {{ p.Descripcion }} <br>
+                            Precio: {{ p.Precio }} <br><hr>
+                            Información del Proveedor <br>
+                            {{ p.proveedor.Nombre }} - {{ p.proveedor.Nit }}
+                          </p>
+                          <div class="d-flex justify-content-center">
+                            <a href="/Producto/actualizar/{{p.id}}">  <i class="fa fa-edit fa-2x me-4"></i> </a> 
+
+                            <form action="/Producto/eliminar" method="post" id="form{{p.id}}">
+                              {% csrf_token %}
+                              <input type="hidden" name="idproducto" value="{{p.id}}">
+                              <input type="hidden" name="foto" value="{{p.Foto}}">
+                            </form>
+                            <a onclick="borrar('{{p.id}}')" href="#">  <i class="fa fa-trash-o fa-2x me-4"></i> </a>  
+                            <a href="#" onclick="ConsumirApi('{{ p.id }}')">  <i class="fa fa-info-circle fa-2x me-4"></i> </a>  
+                          </div>                          
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>  
+      </div>  
+  </section>
+
+  <!-- recordar que este formulario era para probar que si funciona el API por POST -->
+  <!-- <form action="/Producto/api" method="post">
+    {% csrf_token %}
+    <input type="number" name="idproducto" id="idproducto">
+    
+  </form>
+  <button type="button" onclick="ConsumirApi()"> Probar Api</button> -->
+
+  <!-- Modal -->
+  <div class="modal fade modal-lg" id="modalproducto" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="tituloproducto">  </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center">
+            <img src="" alt="" width="200" height="200" id="fotoproducto" class="rounded">
+            <hr>
+            <h4 id="precioproducto"></h4>
+            <h4 id="cantidadproducto"></h4>
+            <h4 id="descripcionproducto"></h4>
+            <h4 id="fechaproducto"></h4>
+            <h4 id="proveedorproducto"></h4>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function borrar(id){
+      Swal.fire({
+        title: "Esta seguro de eliminar el registro?",
+        text: "El registro será eliminado de la base de datos",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Borrar definitivamente!!!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('form'+id).submit();
+        }
+      });
+  
+    }
+
+    function ConsumirApi(idproducto){
+      const tokenproducto = document.querySelector('[name="csrfmiddlewaretoken"]').value
+      let id_producto= idproducto
+      fetch('/Producto/api',{
+        method: 'POST',
+        headers: {
+          'Content-Type': 'applicaion/json',
+          'X-CSRFToken': tokenproducto  //hash del token
+        },
+        body: JSON.stringify({
+          idproducto: id_producto // aqui el id a consultar
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        //console.log("llego la información")
+        if (data.length != 0){
+          console.log(data)
+          document.getElementById('tituloproducto').innerHTML= data[0].fields.Nombre
+          document.getElementById('fotoproducto').src= "{% static 'Img/Productos/' %}"+data[0].fields.Foto
+          document.getElementById('precioproducto').innerHTML= "Precio: " + data[0].fields.Precio
+          document.getElementById('cantidadproducto').innerHTML="Cantidad: " + data[0].fields.Cantidad
+          document.getElementById('descripcionproducto').innerHTML="Descripcion: " + data[0].fields.Descripcion
+          document.getElementById('fechaproducto').innerHTML= "Fecha: " + data[0].fields.Fecha
+          document.getElementById('proveedorproducto').innerHTML= "Proveedor: " + data[0].fields.proveedor
+          $('#modalproducto').modal('show')
+        }
+        else{
+            Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "No se puedo encontrat la información",            
+          }); 
+        }     
+
+      })
+      .catch((error) => {
+        console.log("Se presentó un error")
+        console.log(error)
+      })
+    }
+  </script>
+</div>
+
+
+
+{% include 'Inc/footer.html' %}

@@ -1,0 +1,46 @@
+{% load static %}
+{% include 'Inc/header.html' %}
+<h1>Insertar Proveedor</h1>
+
+<div class="container">
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-4">
+                <label for="">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="nombre" required>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="">Direccion:</label>
+                <input type="text" name="direccion" id="direccion" class="form-control" placeholder="direccion" required>
+            </div> 
+        
+            <div class="col-md-4">
+                <label for="">Nit:</label>
+                <input type="text" name="nit" id="nit" class="form-control" placeholder="nit" required>
+            </div> 
+        </div> 
+        <div class="row">
+            <div class="col-md-6">
+                <label for="">Email:</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="email" required>
+            </div>   
+            
+            <div class="col-md-6">
+                <label for="">Observaciones:</label>
+                <input type="text" name="observaciones" id="observaciones" class="form-control" placeholder="observaciones" required>
+            </div> 
+        </div><br>
+        <div class="text-center mt-2">
+            <button type="submit" class="btn btn-success">Insertar Proveedor</button>
+        </div>       
+        
+    </form>       
+    
+</div>
+
+
+
+ 
+{% include 'Inc/footer.html' %}

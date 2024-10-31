@@ -1,0 +1,63 @@
+{% load static %}
+{% include 'Inc/header.html' %}
+
+<h1>Insertar un Nuevo Producto</h1>
+
+<div class="container">
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-4">
+                <label for="">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="nombre" required>
+            </div>
+            
+            <div class="col-md-4">
+                <label for="">Precio:</label>
+                <input type="number" name="precio" id="precio" class="form-control" placeholder="precio" required>
+            </div> 
+        
+            <div class="col-md-4">
+                <label for="">Foto:</label>
+                <input type="file" name="foto" id="foto" class="form-control" placeholder="foto" required>
+            </div> 
+        </div> 
+
+        <div class="row">
+            <div class="col-md-3">
+                <label for="">Cantidad:</label>
+                <input type="number" name="cantidad" id="cantidad" class="form-control" placeholder="cantidad" required>
+            </div>   
+            
+            <div class="col-md-3">
+                <label for="">Descripcion:</label>
+                <input type="text" name="descripcion" id="descripcion" class="form-control" placeholder="descripcion" required>
+            </div> 
+
+            <div class="col-md-3">
+                <label for="">Fecha de Registro:</label>
+                <input type="date" name="fecha" id="fecha" class="form-control" placeholder="fecha" required>
+            </div> 
+
+            <div class="col-md-3">
+                <label for="">Proveedor del producto:</label>
+                <select name="proveedor_id" id="proveedor_id" class="form-select" required>
+                    <option value="" disabled>Selecione un proveedor</option>
+                    {% for p in proveedores %}
+                    <option value="{{ p.id }}">  {{ p.Nombre }} - {{ p.Nit }}</option>
+                    {% endfor %}
+                </select>
+            </div> 
+
+        </div><br>
+
+        <div class="text-center mt-2">
+            <button type="submit" class="btn btn-success">Insertar Producto</button>
+        </div>       
+        
+    </form>       
+    
+</div>
+ 
+{% include 'Inc/footer.html' %}
