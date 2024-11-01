@@ -20,6 +20,7 @@ from ProyectoMarket.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',home),
     path('Proveedor/insertar',InsertarProveedor),
     path('Proveedor/listado',ListadoProveedores),
     path('Proveedor/actualizar/<str:idproveedor>',ActualizarProveedor),
@@ -29,4 +30,7 @@ urlpatterns = [
     path('Producto/actualizar/<str:idproducto>',ActualizarProducto),
     path('Producto/eliminar',EliminarProducto),
     path('Producto/api',ApiProducto),
+    path('Usuarios/login',login),
+    path('Usuarios/registro',RegistrarUsuario),
+   
 ]

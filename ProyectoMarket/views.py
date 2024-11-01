@@ -5,6 +5,10 @@ from django.core.files.storage import FileSystemStorage
 from django.core.serializers import serialize #para serializar diccionarios en json
 from django.http import HttpResponse # para enviar respuesta directas sin usar un template
 import json #para leer y convertir json
+from django.contrib.auth.models import User
+
+def home(request):
+    return render(request,'home.html')
 
 #region proveedores
 def InsertarProveedor(request):
@@ -122,10 +126,35 @@ def EliminarProducto(request):
 
 def ApiProducto(request):
     id_producto= json.loads(request.body)
-    idproducto= id_producto.get('idproducto')
-    #idproducto= request.POST.get('idproducto')
+    idproducto= id_producto.get('idproducto')    
     producto= Productos.objects.filter(id=idproducto)
+    proveedor=""
+
+    for p in producto:
+        proveedor= p.proveedor.Nombre
+
     productojson= serialize('json',producto)
-    return HttpResponse(productojson,content_type='application/json')
+    producto_data= json.loads(productojson)
+
+    for p in producto_data:
+        p['fields']['Nombreproveedor']= proveedor
+    producto_json_actualizado= json.dumps(producto_data)
+    return HttpResponse(producto_json_actualizado,content_type='application/json')
+
+#endregion
+
+#region login
+def login(request):
+    return render(request,'Usuarios/login.html') #el render debe ser ruta fisica del html sin / al inicio
+
+def RegistrarUsuario(request):
+    if request.method == 'POST':
+        if request.POST.get('username') and request.POST.get('password') and request.POST.get('first_name') and request.POST.get('last_name') and request.POST.get('email'):
+            user = User.objects.create_user(request.POST.get('username'), request.POST.get('email'),request.POST.get('password'))
+            user.first_name=request.POST.get('first_name')
+            user.last_name= request.POST.get('last_name')
+            user.save()
+            return redirect('/Usuarios/login') #el redirect debe coincidir con la ruta del archivo urls.py
+            
 
 #endregion

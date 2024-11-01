@@ -74,11 +74,13 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button onclick="imprimirproducto()" type="button" class="btn btn-primary">Generar PDF</button>
         </div>
       </div>
     </div>
   </div>
+
+  <script src="{% static 'Js/jspdf.umd.min.js' %}"></script> 
 
   <script>
     function borrar(id){
@@ -122,7 +124,7 @@
           document.getElementById('cantidadproducto').innerHTML="Cantidad: " + data[0].fields.Cantidad
           document.getElementById('descripcionproducto').innerHTML="Descripcion: " + data[0].fields.Descripcion
           document.getElementById('fechaproducto').innerHTML= "Fecha: " + data[0].fields.Fecha
-          document.getElementById('proveedorproducto').innerHTML= "Proveedor: " + data[0].fields.proveedor
+          document.getElementById('proveedorproducto').innerHTML= "Proveedor: " + data[0].fields.Nombreproveedor
           $('#modalproducto').modal('show')
         }
         else{
@@ -139,9 +141,18 @@
         console.log(error)
       })
     }
+
+    function imprimirproducto(){
+      let nombreproducto= document.getElementById('tituloproducto').innerText
+      const { jsPDF }= window.jspdf
+      const doc = new jsPDF('p','mm','a3')      
+      let imagen = new Image()
+      imagen.src = document.getElementById('fotoproducto').src
+      doc.addImage(imagen,'PNG',50,50,200,200)
+      doc.text("Nombre producto: " + nombreproducto,10,20)      
+      doc.save("Producto.pdf")
+    }
   </script>
 </div>
-
-
 
 {% include 'Inc/footer.html' %}
