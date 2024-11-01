@@ -3,35 +3,63 @@
 <h1>Insertar Proveedor</h1>
 
 <div class="container">
-    <form action="" method="post">
+    <!-- class="needs-validation"  novalidate = para validar desde el formulario-->
+    <form action="" method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="row">
             <div class="col-md-4">
-                <label for="">Nombre:</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="nombre" required>
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" placeholder="nombre" value="{{nombre}}" required>
+                <div class="valid-feedback">
+                    Todo Ok
+                </div>
+                <div class="invalid-feedback">
+                    Complete este campo
+                </div>
             </div>
             
             <div class="col-md-4">
-                <label for="">Direccion:</label>
-                <input type="text" name="direccion" id="direccion" class="form-control" placeholder="direccion" required>
+                <label for="direccion">Direccion:</label>
+                <input type="text" name="direccion" id="direccion" class="form-control" placeholder="direccion" value="{{direccion}}" required>
+                <div class="valid-feedback">
+                    Todo Ok
+                </div>
+                <div class="invalid-feedback">
+                    Complete este campo
+                </div>
             </div> 
         
             <div class="col-md-4">
-                <label for="">Nit:</label>
-                <input type="text" name="nit" id="nit" class="form-control" placeholder="nit" required>
+                <label for="nit">Nit:</label>
+                <input type="text" name="nit" id="nit" class="form-control" placeholder="nit" value="{{nit}}" required>
+                <div class="valid-feedback">
+                    Todo Ok
+                </div>
+                <div class="invalid-feedback">
+                    Complete este campo
+                </div>
             </div> 
         </div> 
         <div class="row">
             <div class="col-md-6">
-                <label for="">Email:</label>
-                <input type="email" name="email" id="email" class="form-control" placeholder="email" required>
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="email" value="{{email}}" required>
+                <div class="valid-feedback">
+                    Todo Ok
+                </div>
+                <div class="invalid-feedback">
+                    Complete este campo
+                </div>
             </div>   
             
             <div class="col-md-6">
                 <label for="">Observaciones:</label>
-                <input type="text" name="observaciones" id="observaciones" class="form-control" placeholder="observaciones" required>
+                <input type="text" name="observaciones" id="observaciones" class="form-control" placeholder="observaciones" value="{{observaciones}}" required>
             </div> 
         </div><br>
+        <h5 style="color: red;">
+            {{mensaje}}
+        </h5>
         <div class="text-center mt-2">
             <button type="submit" class="btn btn-success">Insertar Proveedor</button>
         </div>       
@@ -39,6 +67,22 @@
     </form>       
     
 </div>
+
+<script>
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+            }, false)
+        })
+        })()
+</script>
 
 
 

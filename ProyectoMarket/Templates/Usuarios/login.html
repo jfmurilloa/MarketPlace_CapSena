@@ -29,7 +29,10 @@
 					{% csrf_token %}
 					<h1>Ingresar al Sistema</h1>					
 					<input type="text" name="username"  id="username" placeholder="Nombre de usuario" />
-					<input type="password" name="password"  id="password" placeholder="Contraseña" />					
+					<input type="password" name="password"  id="password" placeholder="Contraseña" />	
+					<span style="color: red;"> 
+						{{ mensajeerror }}
+					</span>				
 					<button type="submit">Ingresar</button>
 				</form>
 			</div>

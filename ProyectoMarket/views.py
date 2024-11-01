@@ -6,9 +6,31 @@ from django.core.serializers import serialize #para serializar diccionarios en j
 from django.http import HttpResponse # para enviar respuesta directas sin usar un template
 import json #para leer y convertir json
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,login,logout
 
+'''def home(request):
+    if request.user.is_authenticated:
+        return render(request,'home.html')
+    else:
+        return redirect('/Usuarios/login')'''
 def home(request):
-    return render(request,'home.html')
+    if request.user.is_authenticated:        
+      
+        # Obtén todos los proveedores
+        proveedores = Proveedor.objects.all()
+
+        # Recorre cada proveedor y muestra sus productos
+        for proveedor in proveedores:
+            print(f"Proveedor: {proveedor.Nombre}")
+            productos = proveedor.productos_set.all()  # Obtén los productos de cada proveedor
+            
+            for producto in productos:
+                print(f"  Producto: {producto.Nombre}, Precio: {producto.Precio}, Cantidad: {producto.Cantidad}")
+            print("---")
+                    
+        return render(request,'home.html')
+    else:
+        return redirect('/Usuarios/login')
 
 #region proveedores
 def InsertarProveedor(request):
@@ -23,6 +45,15 @@ def InsertarProveedor(request):
             insertar= connection.cursor()
             insertar.execute("CALL sp_insertarproveedor(%s,%s,%s,%s,%s)",(nombre,direccion,nit,email,observaciones))
             return redirect('/Proveedor/listado') #coinside con path('Proveedor/listado',ListadoProveedores),
+        else:
+            nombre=request.POST.get('nombre')
+            direccion=request.POST.get('direccion')
+            nit=request.POST.get('nit')
+            email=request.POST.get('email')
+            observaciones=request.POST.get('observaciones')
+            mensaje='Favor llenar los datos faltantes'
+            return render(request,'Proveedor/insertarproveedor.html',{'nombre':nombre,'direccion':direccion,'nit':nit,'email':email,'observaciones':observaciones,'mensaje':mensaje})
+        
     else:
         return render(request, 'Proveedor/insertarproveedor.html')
 
@@ -144,8 +175,18 @@ def ApiProducto(request):
 #endregion
 
 #region login
-def login(request):
-    return render(request,'Usuarios/login.html') #el render debe ser ruta fisica del html sin / al inicio
+def loginusuario(request):
+    if request.method=='POST':
+        if request.POST.get('username') and request.POST.get('password'):
+            user= authenticate(username=request.POST.get('username'),password=request.POST.get('password'))
+            if user is not None:
+                login(request,user)
+                return redirect('/')
+            else:
+                mensajeerror='Usuario o contraseña incorrectas, Intente de nuevo'
+                return render(request,'Usuarios/login.html',{'mensajeerror':mensajeerror})
+    else:
+        return render(request,'Usuarios/login.html') #el render debe ser ruta fisica del html sin / al inicio
 
 def RegistrarUsuario(request):
     if request.method == 'POST':
@@ -155,6 +196,12 @@ def RegistrarUsuario(request):
             user.last_name= request.POST.get('last_name')
             user.save()
             return redirect('/Usuarios/login') #el redirect debe coincidir con la ruta del archivo urls.py
-            
+
+def logoutusuario(request):
+    logout(request)
+    return redirect('/Usuarios/login')
+
+
+
 
 #endregion

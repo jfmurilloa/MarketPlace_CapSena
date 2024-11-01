@@ -30,7 +30,8 @@ urlpatterns = [
     path('Producto/actualizar/<str:idproducto>',ActualizarProducto),
     path('Producto/eliminar',EliminarProducto),
     path('Producto/api',ApiProducto),
-    path('Usuarios/login',login),
+    path('Usuarios/login',loginusuario),
     path('Usuarios/registro',RegistrarUsuario),
+    path('Usuarios/logout',logoutusuario),
    
 ]
